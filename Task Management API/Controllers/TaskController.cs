@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Task_Management_API.Data;
-using Task_Management_API.Models;
+using Task_Management_API.DTOs;
 using Task_Management_API.Models.Enums;
+using Task_Management_API.Mappers;
 
 namespace Task_Management_API.Controllers
 {
@@ -19,7 +20,7 @@ namespace Task_Management_API.Controllers
 
         // GET: api/tasks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(
+        public async Task<ActionResult<object>> GetTasks(
             bool? isCompleted,
             Priority? priority,
             DateTime? dueBefore,
@@ -50,69 +51,60 @@ namespace Task_Management_API.Controllers
 
             // Pagination
             var totalCount = await query.CountAsync();
-            var tasks = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var tasks = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return Ok(new
             {
                 page,
                 pageSize,
                 totalCount,
-                tasks
+                tasks = tasks.Select(t => t.ToTaskResponse())
             });
         }
 
         // GET: api/tasks/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TaskItem>> GetTask(int id)
+        public async Task<ActionResult<TaskResponse>> GetTask(int id)
         {
             var task = await _context.Tasks.FindAsync(id);
 
             if (task == null)
                 return NotFound();
 
-            return task;
+            return Ok(task.ToTaskResponse());
         }
 
         // POST: api/tasks
         [HttpPost]
-        public async Task<ActionResult<TaskItem>> CreateTask(TaskItem task)
+        public async Task<ActionResult<TaskResponse>> CreateTask(CreateTaskRequest request)
         {
-            if (task.DueDate.HasValue && task.DueDate.Value < DateTime.UtcNow)
-            {
+            if (request.DueDate.HasValue && request.DueDate.Value < DateTime.UtcNow)
                 return BadRequest(new { error = "Due date cannot be in the past." });
-            }
 
-            task.CreatedAt = DateTime.UtcNow;
-            task.UpdatedAt = DateTime.UtcNow;
+            var task = request.ToTaskItem();
 
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task.ToTaskResponse());
         }
 
         // PUT: api/tasks/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, TaskItem updatedTask)
+        public async Task<IActionResult> UpdateTask(int id, UpdateTaskRequest request)
         {
-            if (id != updatedTask.Id)
-                return BadRequest();
-
             var task = await _context.Tasks.FindAsync(id);
             if (task == null)
                 return NotFound();
 
-            // Update fields
-            task.Title = updatedTask.Title;
-            task.Description = updatedTask.Description;
-            task.Priority = updatedTask.Priority;
-            task.DueDate = updatedTask.DueDate;
-            task.IsCompleted = updatedTask.IsCompleted;
-            task.UpdatedAt = DateTime.UtcNow;
+            task.UpdateTaskItem(request);
 
             await _context.SaveChangesAsync();
 
-            return Ok(task);
+            return Ok(task.ToTaskResponse());
         }
 
         // DELETE: api/tasks/5
