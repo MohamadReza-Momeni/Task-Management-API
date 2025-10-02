@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Task_Management_API.Models.Enums;
 
 namespace Task_Management_API.Models
 {
@@ -13,7 +14,7 @@ namespace Task_Management_API.Models
         public string? Description { get; set; }
 
         [Required]
-        public string Priority { get; set; } // Enum stored as string
+        public Priority Priority { get; set; }  // "Low", "Medium", "High"
 
         public DateTime? DueDate { get; set; }
 
