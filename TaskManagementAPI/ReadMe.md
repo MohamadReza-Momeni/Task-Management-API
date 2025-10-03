@@ -1,4 +1,4 @@
-# Task Management API
+﻿# Task Management API
 
 A simple but complete Task Management REST API built with .NET 9, Entity Framework Core, and PostgreSQL, packaged in Docker for easy local development.  
 Includes Scalar API documentation for frontend integration and developer-friendly CORS configuration.
@@ -11,7 +11,7 @@ Includes Scalar API documentation for frontend integration and developer-friendl
 - Task priority with enums (Low, Medium, High)  
 - Persistent storage using PostgreSQL & Docker volumes  
 - Auto migrations on startup  
-- CORS configured for localhost (any port) � ideal for frontend development  
+- CORS configured for localhost (any port) — ideal for frontend development  
 - Scalar API documentation at `/scalar`  
 - Ready-to-run with one command via Docker Compose
 
@@ -33,7 +33,7 @@ Includes Scalar API documentation for frontend integration and developer-friendl
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)  
 - Optional: [Postman](https://www.postman.com/) or `curl` for API testing
 
-No .NET SDK required � everything runs in Docker.
+No .NET SDK required — everything runs in Docker.
 
 ---
 
@@ -50,7 +50,7 @@ This will:
 * Apply EF Core migrations automatically
 * Start the API on port 5250
 
-Once it�s up, you should see logs like:
+Once it’s up, you should see logs like:
 
 ```
 info: Microsoft.Hosting.Lifetime[14]
@@ -121,7 +121,7 @@ No HTTPS is required during local development.
 
 You can connect using TablePlus, DBeaver, pgAdmin, or psql if needed.
 
-Data is persistent thanks to Docker volumes � stopping and restarting containers will not wipe your database.
+Data is persistent thanks to Docker volumes — stopping and restarting containers will not wipe your database.
 
 ---
 
@@ -152,7 +152,7 @@ Frontend developers can:
 * Use `http://localhost:5250` as the API base URL
 * Use the `/scalar` page to explore endpoints, schemas, and example requests
 
-CORS is already configured � no extra proxy setup is needed.
+CORS is already configured — no extra proxy setup is needed.
 
 ---
 
@@ -160,19 +160,19 @@ CORS is already configured � no extra proxy setup is needed.
 
 ```
 TaskManagementAPI/
-??? Controllers/
-?   ??? TasksController.cs
-??? Data/
-?   ??? TaskDbContext.cs
-??? DTOs/
-?   ??? CreateTaskRequest.cs, UpdateTaskRequest.cs, TaskResponse.cs
-??? Models/
-?   ??? TaskItem.cs
-??? Migrations/
-??? Program.cs
-??? Dockerfile
-??? docker-compose.yml
-??? README.md
+├── Controllers/
+│   └── TasksController.cs
+├── Data/
+│   └── TaskDbContext.cs
+├── DTOs/
+│   └── CreateTaskRequest.cs, UpdateTaskRequest.cs, TaskResponse.cs
+├── Models/
+│   └── TaskItem.cs
+├── Migrations/
+├── Program.cs
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
