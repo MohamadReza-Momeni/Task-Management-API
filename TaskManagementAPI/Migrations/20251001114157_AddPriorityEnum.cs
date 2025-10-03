@@ -10,13 +10,15 @@ namespace Task_Management_API.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "Priority",
-                table: "Tasks",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "TEXT");
+            //migrationBuilder.AlterColumn<int>(
+            //    name: "Priority",
+            //    table: "Tasks",
+            //    type: "INTEGER",
+            //    nullable: false,
+            //    oldClrType: typeof(string),
+            //    oldType: "TEXT");
+            migrationBuilder.Sql("ALTER TABLE \"Tasks\" ALTER COLUMN \"Priority\" TYPE integer USING \"Priority\"::integer;");
+
         }
 
         /// <inheritdoc />

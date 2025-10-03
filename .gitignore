@@ -27,3 +27,4 @@ artifacts/
 *.cache
 *.log
 [Tt]est[Rr]esult*/
+TaskManagementAPI/tasks.db
